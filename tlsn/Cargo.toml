@@ -9,6 +9,7 @@ members = [
     "tests-integration",
     "examples",
     "benches",
+    "portal"
 ]
 resolver = "2"
 
