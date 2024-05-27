@@ -44,7 +44,7 @@ pub async fn request_notarization(
         "../../../notary-server/fixture/tls/rootCA.crt"
     ))
     .unwrap();
-    let mut reader = std::io::BufReader::new(pem_file.as_bytes());
+    let mut reader: std::io::BufReader<&[u8]> = std::io::BufReader::new(pem_file.as_bytes());
     let mut certificates: Vec<Certificate> = rustls_pemfile::certs(&mut reader)
         .unwrap()
         .into_iter()
@@ -65,9 +65,9 @@ pub async fn request_notarization(
 
     let notary_tls_socket = notary_connector
         // Require the domain name of notary server to be the same as that in the server cert
-        .connect("127.0.0.1".try_into().unwrap(), notary_socket)
+        .connect("tlsnotaryserver.io".try_into().unwrap(), notary_socket)
         .await
-        .unwrap();
+        .expect("init notary tls socket failed");
 
     // Attach the hyper HTTP client to the notary TLS connection to send request to the /session endpoint to configure notarization and obtain session id
     let (mut request_sender, connection) =

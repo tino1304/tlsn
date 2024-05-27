@@ -58,7 +58,7 @@ async fn notarize(data: web::Data<AppState>, _req: HttpRequest, bytes: web::Byte
     }));
   }
 
-  let x_host = raw_headers.get("host").unwrap_or(&HeaderValue::from(0)).to_str().unwrap_or("").to_string();
+  let x_host = raw_headers.get("x-tlsn-host").unwrap_or(&HeaderValue::from(0)).to_str().unwrap_or("").to_string();
   if x_host == "0" {
     return Ok(web::Json(ResponsePayload {
       status: StatusCode::BAD_REQUEST.as_u16(),
